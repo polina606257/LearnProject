@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "LearnProject"
 include(":app")
- 
+include(":styling")
