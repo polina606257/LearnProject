@@ -4,6 +4,6 @@
         <item name="android:textColor">@color/colorBlue</item>
         <item name="boxStrokeColor">@color/red</item>
         <item name="colorPrimary">@color/orange</item>
-        <item name="hintTextColor">@color/red</item>
+        <item name="hintTextColor">@color/colorBlue</item>
     </style>
 </resources>
