@@ -18,16 +18,6 @@ class ArtworkAdapter : ListAdapter<Artwork, ArtworkAdapter.ViewHolder>(ArtworkDi
     class ViewHolder(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
             binding.textView.text = artwork.title
-            val imageBitmap = decodeBytes(artwork.thumbnail.lqip)
-            Glide.with(binding.image.context)
-                .load(imageBitmap)
-                .into(binding.image);
-        }
-
-        private fun decodeBytes(image: String) : Bitmap {
-            val base64String = image.substringAfter("base64,")
-            val decodedString: ByteArray = Base64.decode(base64String, Base64.DEFAULT)
-            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
         }
     }
 
