@@ -12,7 +12,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recycler.data.network.Result
 import com.example.recycler.databinding.FragmentArtworkBinding
-import com.example.recycler.model.Artwork
+import com.example.recycler.model.BaseItem
+import com.example.recycler.model.Item1
+import com.example.recycler.model.Item2
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,12 +22,15 @@ class ArtworkFragment : Fragment() {
     private lateinit var binding: FragmentArtworkBinding
     private val artworkViewModel: ArtworkViewModel by viewModel()
     private lateinit var artworkAdapter: ArtworkAdapter
+    val list = mutableListOf<BaseItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentArtworkBinding.inflate(inflater, container, false)
+        list.add(Item1(1, "Item 1"))
+        list.add(Item2(1, "Item 2"))
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -35,7 +40,10 @@ class ArtworkFragment : Fragment() {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         is Result.Success -> {
-                            artworkAdapter.submitList(data.data)
+                            for (artwork in data.data) {
+                                list.add(artwork)
+                            }
+                            artworkAdapter.submitList(list)
                             binding.progressBar.visibility = View.GONE
                         }
                         is Result.Error -> {

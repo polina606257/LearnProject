@@ -8,7 +8,7 @@ data class Artwork (
     val id: Long,
     val title: String,
     val thumbnail: ArtworkImage
-)
+): BaseItem()
 
 data class ArtworkImage(
     val lqip: String
