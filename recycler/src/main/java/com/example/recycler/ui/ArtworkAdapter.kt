@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.recycler.databinding.ArtworkItemBinding
 import com.example.recycler.databinding.Item1Binding
 import com.example.recycler.databinding.Item2Binding
@@ -21,6 +22,9 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
     class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
             binding.textView.text = artwork.title
+            Glide.with(binding.image.context)
+                .load(artwork.image_url)
+                .into(binding.image)
         }
     }
 

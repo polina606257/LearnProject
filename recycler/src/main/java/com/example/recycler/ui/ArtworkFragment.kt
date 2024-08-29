@@ -16,6 +16,7 @@ import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Identifier
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ArtworkFragment : Fragment() {
@@ -47,7 +48,7 @@ class ArtworkFragment : Fragment() {
                             binding.progressBar.visibility = View.GONE
                         }
                         is Result.Error -> {
-                            Toast.makeText(requireContext(), "Error occured", Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), data.exception.message, Toast.LENGTH_LONG).show()
                             binding.progressBar.visibility = View.GONE
                         }
                     }
