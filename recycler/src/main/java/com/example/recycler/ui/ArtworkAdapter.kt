@@ -2,13 +2,13 @@ package com.example.recycler.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recycler.databinding.ArtworkItemBinding
 import com.example.recycler.model.Artwork
 
-class ArtworkAdapter() :
-    RecyclerView.Adapter<ArtworkAdapter.ViewHolder>() {
-    private var listArtwork: List<Artwork> = emptyList()
+class ArtworkAdapter : ListAdapter<Artwork, ArtworkAdapter.ViewHolder>(ArtworkDiffUtils()) {
 
     class ViewHolder(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
@@ -22,14 +22,17 @@ class ArtworkAdapter() :
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val artwork = listArtwork[position]
+        val artwork = getItem(position)
         viewHolder.bind(artwork)
     }
+}
 
-    override fun getItemCount() = listArtwork.size
+class ArtworkDiffUtils : DiffUtil.ItemCallback<Artwork>() {
+    override fun areItemsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-    fun updateData(newArtworks: List<Artwork>) {
-        listArtwork = newArtworks
-        notifyDataSetChanged()
+    override fun areContentsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
+        return oldItem.id == newItem.id && oldItem.title == newItem.title
     }
 }

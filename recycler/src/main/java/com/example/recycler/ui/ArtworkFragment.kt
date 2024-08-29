@@ -35,7 +35,7 @@ class ArtworkFragment : Fragment() {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         is Result.Success -> {
-                            artworkAdapter.updateData(data.data)
+                            artworkAdapter.submitList(data.data)
                             binding.progressBar.visibility = View.GONE
                         }
                         is Result.Error -> {
