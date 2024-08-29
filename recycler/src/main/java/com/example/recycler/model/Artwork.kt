@@ -6,5 +6,10 @@ data class ArtworksResponse(
 
 data class Artwork (
     val id: Long,
-    val title: String
+    val title: String,
+    val thumbnail: ArtworkImage
+)
+
+data class ArtworkImage(
+    val lqip: String
 )
