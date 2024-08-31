@@ -1,6 +1,5 @@
 package com.example.recycler.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recycler.data.network.Result
@@ -18,13 +17,8 @@ class ArtworkViewModel(val artworkRepository: ArtworkRepository) : ViewModel() {
     fun fetchData() {
         viewModelScope.launch {
             try {
-                val artworkWithImage = mutableListOf<Artwork>()
-                val artworkList = async {  artworkRepository.getArtworks(1, 5) }
-                for (artwork in artworkList.await()) {
-                    val imageUrl = async {  artworkRepository.getPicture(artwork.image_id) }
-                    artworkWithImage.add(artwork.copy(image_url = imageUrl.await()))
-                }
-                _artworkState.value = Result.Success(artworkWithImage)
+                val artworkList = artworkRepository.getArtworks(1, 5)
+                _artworkState.value = Result.Success(artworkList)
             } catch (e: Exception) {
                 _artworkState.value = Result.Error(e)
             }

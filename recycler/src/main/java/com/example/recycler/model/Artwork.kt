@@ -7,6 +7,5 @@ data class ArtworksResponse(
 data class Artwork (
     val id: Long,
     val title: String,
-    val image_id: String,
-    val image_url: String
+    val image_id: String
 ): BaseItem()

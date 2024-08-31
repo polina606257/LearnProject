@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.recycler.databinding.ArtworkItemBinding
 import com.example.recycler.databinding.Item1Binding
 import com.example.recycler.databinding.Item2Binding
+import com.example.recycler.di.BASE_URL
 import com.example.recycler.model.Artwork
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
@@ -22,8 +23,9 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
     class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
             binding.textView.text = artwork.title
-            Glide.with(binding.image.context)
-                .load(artwork.image_url)
+            Glide.with(binding.root.context)
+                .load("${BASE_URL}iiif/2/${artwork.image_id}/full/843,/0/default.jpg")
+                .centerCrop()
                 .into(binding.image)
         }
     }

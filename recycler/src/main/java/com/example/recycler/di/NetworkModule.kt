@@ -8,7 +8,7 @@ class NetworkModule {
 
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://api.artic.edu/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -17,3 +17,5 @@ class NetworkModule {
         return retrofit.create(ApiService::class.java)
     }
 }
+
+const val BASE_URL = "https://api.artic.edu/"
