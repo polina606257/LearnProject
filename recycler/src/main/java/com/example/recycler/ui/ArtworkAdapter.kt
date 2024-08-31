@@ -23,8 +23,8 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
     class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
             binding.textView.text = artwork.title
-            Glide.with(binding.root)
-                .load("${BASE_URL}iiif/2/${artwork.image_id}/full/843,/0/default.jpg")
+            Glide.with(binding.image)
+                .load("https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg")
                 .centerCrop()
                 .into(binding.image)
         }
