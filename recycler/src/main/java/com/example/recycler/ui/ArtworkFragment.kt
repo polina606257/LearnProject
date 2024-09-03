@@ -1,11 +1,11 @@
 package com.example.recycler.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -15,8 +15,8 @@ import com.example.recycler.databinding.FragmentArtworkBinding
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
+import com.example.recycler.model.PirateFlag
 import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.Identifier
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ArtworkFragment : Fragment() {
@@ -36,22 +36,33 @@ class ArtworkFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artworkViewModel.artworkState.collect { data ->
-                    when(data) {
+                    when (data) {
                         is Result.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
+
                         is Result.Success -> {
-                            for (artwork in data.data) {
-                                list.add(artwork)
-                            }
-                            artworkAdapter.submitList(list)
                             binding.progressBar.visibility = View.GONE
                         }
+
                         is Result.Error -> {
                             Toast.makeText(requireContext(), data.exception.message, Toast.LENGTH_LONG).show()
                             binding.progressBar.visibility = View.GONE
                         }
                     }
+                }
+            }
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                artworkViewModel.artworkWithPirateInfoStateFlow.collect { data ->
+                    for (artwork in data) {
+                        if (artwork.isPirate) {
+                            list.add(PirateFlag())
+                        } else {
+                            list.add(artwork)
+                        }
+                    }
+                    artworkAdapter.submitList(list)
+                    binding.progressBar.visibility = View.GONE
                 }
             }
         }

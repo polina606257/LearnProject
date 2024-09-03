@@ -9,16 +9,24 @@ import com.bumptech.glide.Glide
 import com.example.recycler.databinding.ArtworkItemBinding
 import com.example.recycler.databinding.Item1Binding
 import com.example.recycler.databinding.Item2Binding
+import com.example.recycler.databinding.PirateFlagBinding
 import com.example.recycler.di.BASE_URL
 import com.example.recycler.model.Artwork
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
+import com.example.recycler.model.PirateFlag
+import com.example.recycler.ui.BaseType.Companion.PIRATE_FLAG
 import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_1
 import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_2
 import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_3
 
 class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUtils()) {
+
+    class ViewHolderPirateFlag(val binding: PirateFlagBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(pirateFlag: PirateFlag) {
+        }
+    }
 
     class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(artwork: Artwork) {
@@ -47,6 +55,7 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
             is Item1 -> VIEW_ITEM_1
             is Item2 -> VIEW_ITEM_2
             is Artwork -> VIEW_ITEM_3
+            is PirateFlag -> PIRATE_FLAG
             else -> throw IllegalArgumentException("Invalid item type")
         }
     }
@@ -56,6 +65,7 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
             VIEW_ITEM_1 -> ViewHolderItem1(Item1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             VIEW_ITEM_2 -> ViewHolderItem2(Item2Binding.inflate(LayoutInflater.from(parent.context), parent, false))
             VIEW_ITEM_3 -> ViewHolderArtwork(ArtworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            PIRATE_FLAG -> ViewHolderPirateFlag(PirateFlagBinding.inflate(LayoutInflater.from(parent.context), parent, false))
             else -> throw IllegalArgumentException("Please provide a valid viewType")
         }
     }
@@ -72,6 +82,9 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
             holder is ViewHolderArtwork && item is Artwork -> {
                 holder.bind(item)
             }
+            holder is ViewHolderPirateFlag && item is PirateFlag-> {
+                holder.bind(item)
+            }
             else -> throw IllegalArgumentException("Invalid ViewHolder type or item")
         }
     }
@@ -82,6 +95,7 @@ interface BaseType {
         const val VIEW_ITEM_1: Int = 0
         const val VIEW_ITEM_2: Int = 1
         const val VIEW_ITEM_3: Int = 2
+        const val PIRATE_FLAG: Int = 3
     }
 }
 
@@ -92,6 +106,7 @@ class BaseDiffUtils : DiffUtil.ItemCallback<BaseItem>() {
              oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id
              oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id
              oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id
+             oldItem is PirateFlag && newItem is PirateFlag -> oldItem.id == newItem.id
              else -> false
          }
     }
@@ -101,6 +116,7 @@ class BaseDiffUtils : DiffUtil.ItemCallback<BaseItem>() {
             oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id && oldItem.title == newItem.title
             oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id && oldItem.title == newItem.title
             oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id && oldItem.title == newItem.title
+            oldItem is PirateFlag && newItem is PirateFlag -> oldItem.id == newItem.id
             else -> false
         }
     }

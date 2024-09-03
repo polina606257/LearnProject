@@ -19,15 +19,13 @@ class ArtworkViewModel(val artworkRepository: ArtworkRepository) : ViewModel() {
     private val _pirateIndexesState = MutableStateFlow(listOf<Int>())
     private val pirateIndexList = mutableListOf<Int>()
 
-    private val artworkWithPirateInfoStateFlow: Flow<Result<List<Artwork>>> = combine(artworkState, _pirateIndexesState) { artwork, isPirate ->
+    val artworkWithPirateInfoStateFlow: Flow<List<Artwork>> = artworkState.combine(_pirateIndexesState) { artwork, isPirate ->
         if (artwork is Result.Success) {
-            val artworkWithPirateInfo = artwork.data.mapIndexed { index, artwork ->  artwork.copy(isPirate = isPirate.contains(index))}
-            Result.Success(artworkWithPirateInfo)
+           artwork.data.mapIndexed { index, artwork ->  artwork.copy(isPirate = isPirate.contains(index))}
         } else {
-            Result.Error(throw IllegalArgumentException())
+            emptyList()
         }
     }
-
 
     fun fetchData() {
         viewModelScope.launch {
