@@ -15,7 +15,6 @@ import com.example.recycler.model.Artwork
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
-import com.example.recycler.model.PirateFlag
 import com.example.recycler.ui.BaseType.Companion.PIRATE_FLAG
 import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_1
 import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_2
@@ -24,8 +23,6 @@ import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_3
 class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUtils()) {
 
     class ViewHolderPirateFlag(val binding: PirateFlagBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(pirateFlag: PirateFlag) {
-        }
     }
 
     class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -55,7 +52,7 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
             is Item1 -> VIEW_ITEM_1
             is Item2 -> VIEW_ITEM_2
             is Artwork -> VIEW_ITEM_3
-            is PirateFlag -> PIRATE_FLAG
+            is BaseType -> PIRATE_FLAG
             else -> throw IllegalArgumentException("Invalid item type")
         }
     }
@@ -82,8 +79,7 @@ class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUt
             holder is ViewHolderArtwork && item is Artwork -> {
                 holder.bind(item)
             }
-            holder is ViewHolderPirateFlag && item is PirateFlag-> {
-                holder.bind(item)
+            holder is ViewHolderPirateFlag -> {
             }
             else -> throw IllegalArgumentException("Invalid ViewHolder type or item")
         }
@@ -106,7 +102,6 @@ class BaseDiffUtils : DiffUtil.ItemCallback<BaseItem>() {
              oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id
              oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id
              oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id
-             oldItem is PirateFlag && newItem is PirateFlag -> oldItem.id == newItem.id
              else -> false
          }
     }
@@ -116,7 +111,6 @@ class BaseDiffUtils : DiffUtil.ItemCallback<BaseItem>() {
             oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id && oldItem.title == newItem.title
             oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id && oldItem.title == newItem.title
             oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id && oldItem.title == newItem.title
-            oldItem is PirateFlag && newItem is PirateFlag -> oldItem.id == newItem.id
             else -> false
         }
     }

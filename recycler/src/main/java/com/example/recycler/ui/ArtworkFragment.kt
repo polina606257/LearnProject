@@ -15,7 +15,6 @@ import com.example.recycler.databinding.FragmentArtworkBinding
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
-import com.example.recycler.model.PirateFlag
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -55,12 +54,8 @@ class ArtworkFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artworkViewModel.artworkWithPirateInfoStateFlow.collect { data ->
                     for (artwork in data) {
-                        if (artwork.isPirate) {
-                            list.add(PirateFlag())
-                        } else {
                             list.add(artwork)
                         }
-                    }
                     artworkAdapter.submitList(list)
                     binding.progressBar.visibility = View.GONE
                 }
