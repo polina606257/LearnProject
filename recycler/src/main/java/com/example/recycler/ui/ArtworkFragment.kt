@@ -51,16 +51,19 @@ class ArtworkFragment : Fragment() {
                     }
                 }
             }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artworkViewModel.artworkWithPirateInfoStateFlow.collect { data ->
                     for (artwork in data) {
-                            list.add(artwork)
-                        }
+                        list.add(artwork)
+                    }
                     artworkAdapter.submitList(list)
                     binding.progressBar.visibility = View.GONE
                 }
             }
         }
+
         artworkViewModel.fetchData()
         artworkAdapter = ArtworkAdapter()
 
