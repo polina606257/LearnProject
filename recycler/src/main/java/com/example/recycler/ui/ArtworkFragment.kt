@@ -32,6 +32,7 @@ class ArtworkFragment : Fragment() {
         list.add(Item1(1, "Item 1"))
         list.add(Item2(1, "Item 2"))
 
+        artworkViewModel.fetchData()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 artworkViewModel.artworkState.collect { data ->
@@ -59,13 +60,12 @@ class ArtworkFragment : Fragment() {
                         list.add(artwork)
                     }
                     artworkAdapter.submitList(list)
-                    binding.progressBar.visibility = View.GONE
                 }
             }
         }
 
-        artworkViewModel.fetchData()
         artworkAdapter = ArtworkAdapter()
+        artworkAdapter.submitList(list)
 
         binding.artworkRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.artworkRecyclerview.adapter = artworkAdapter
