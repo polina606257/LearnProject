@@ -31,6 +31,15 @@ class ArtworkFragment : Fragment() {
         binding = FragmentArtworkBinding.inflate(inflater, container, false)
         list.add(Item1(1, "Item 1"))
         list.add(Item2(1, "Item 2"))
+        artworkAdapter = ArtworkAdapter()
+        artworkAdapter.submitList(list)
+
+        binding.artworkRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.artworkRecyclerview.adapter = artworkAdapter
+
+        list.add(Item1(1, "Item 3"))
+        list.add(Item1(1, "Item 4"))
+        artworkAdapter.submitList(list)
 
         artworkViewModel.fetchData()
         viewLifecycleOwner.lifecycleScope.launch {
@@ -63,12 +72,6 @@ class ArtworkFragment : Fragment() {
                 }
             }
         }
-
-        artworkAdapter = ArtworkAdapter()
-        artworkAdapter.submitList(list)
-
-        binding.artworkRecyclerview.layoutManager = LinearLayoutManager(requireContext())
-        binding.artworkRecyclerview.adapter = artworkAdapter
 
         return binding.root
     }
