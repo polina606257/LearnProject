@@ -15,6 +15,7 @@ import com.example.recycler.databinding.FragmentArtworkBinding
 import com.example.recycler.model.BaseItem
 import com.example.recycler.model.Item1
 import com.example.recycler.model.Item2
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,9 +38,13 @@ class ArtworkFragment : Fragment() {
         binding.artworkRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.artworkRecyclerview.adapter = artworkAdapter
 
-        list.add(Item1(1, "Item 3"))
-        list.add(Item1(1, "Item 4"))
-        artworkAdapter.submitList(list)
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(1000)
+            artworkAdapter.submitList(null)
+            list.add(Item1(1, "Item 3"))
+            list.add(Item1(1, "Item 4"))
+            artworkAdapter.submitList(list.toList())
+        }
 
         artworkViewModel.fetchData()
         viewLifecycleOwner.lifecycleScope.launch {
@@ -68,7 +73,7 @@ class ArtworkFragment : Fragment() {
                     for (artwork in data) {
                         list.add(artwork)
                     }
-                    artworkAdapter.submitList(list)
+                    artworkAdapter.submitList(list.toList())
                 }
             }
         }
