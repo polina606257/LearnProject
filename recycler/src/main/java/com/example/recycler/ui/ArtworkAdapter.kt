@@ -1,0 +1,120 @@
+package com.example.recycler.ui
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.recycler.databinding.ArtworkItemBinding
+import com.example.recycler.databinding.Item1Binding
+import com.example.recycler.databinding.Item2Binding
+import com.example.recycler.databinding.PirateFlagBinding
+import com.example.recycler.model.Artwork
+import com.example.recycler.model.BaseItem
+import com.example.recycler.model.Item1
+import com.example.recycler.model.Item2
+import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_1
+import com.example.recycler.ui.BaseType.Companion.VIEW_ITEM_2
+import com.example.recycler.ui.BaseType.Companion.ARTWORK
+import com.example.recycler.ui.BaseType.Companion.PIRATE_FLAG
+
+class ArtworkAdapter : ListAdapter<BaseItem, RecyclerView.ViewHolder>(BaseDiffUtils()) {
+
+    class ViewHolderPirateFlag(val binding: PirateFlagBinding) : RecyclerView.ViewHolder(binding.root) {
+
+    }
+
+    class ViewHolderArtwork(val binding: ArtworkItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(artwork: Artwork) {
+            binding.textView.text = artwork.title
+            Glide.with(binding.image)
+                .load("https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg")
+                .centerCrop()
+                .into(binding.image)
+        }
+    }
+
+    class ViewHolderItem1(val binding: Item1Binding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item1: Item1) {
+            binding.item1.text = item1.title
+        }
+    }
+
+    class ViewHolderItem2(val binding: Item2Binding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item2: Item2) {
+            binding.item2.text = item2.title
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (val item = getItem(position)) {
+            is Item1 -> VIEW_ITEM_1
+            is Item2 -> VIEW_ITEM_2
+            is Artwork -> if(!item.isPirate) ARTWORK else PIRATE_FLAG
+            else -> throw IllegalArgumentException("Invalid item type")
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            VIEW_ITEM_1 -> ViewHolderItem1(Item1Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+            VIEW_ITEM_2 -> ViewHolderItem2(Item2Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+            ARTWORK -> ViewHolderArtwork(ArtworkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            PIRATE_FLAG -> ViewHolderPirateFlag(PirateFlagBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else -> throw IllegalArgumentException("Please provide a valid viewType")
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val item = getItem(position)
+        when {
+            holder is ViewHolderItem1 && item is Item1 -> {
+                holder.bind(item)
+            }
+
+            holder is ViewHolderItem2 && item is Item2 -> {
+                holder.bind(item)
+            }
+
+            holder is ViewHolderArtwork && item is Artwork -> {
+                holder.bind(item)
+            }
+
+            holder is ViewHolderPirateFlag -> {
+            }
+
+            else -> throw IllegalArgumentException("Invalid ViewHolder type or item")
+        }
+    }
+}
+
+interface BaseType {
+    companion object {
+        const val VIEW_ITEM_1: Int = 0
+        const val VIEW_ITEM_2: Int = 1
+        const val ARTWORK: Int = 2
+        const val PIRATE_FLAG: Int = 3
+    }
+}
+
+class BaseDiffUtils : DiffUtil.ItemCallback<BaseItem>() {
+
+    override fun areItemsTheSame(oldItem: BaseItem, newItem: BaseItem): Boolean {
+        return when {
+            oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id
+            oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id
+            oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id
+            else -> false
+        }
+    }
+
+    override fun areContentsTheSame(oldItem: BaseItem, newItem: BaseItem): Boolean {
+        return when {
+            oldItem is Item1 && newItem is Item1 -> oldItem.id == newItem.id && oldItem.title == newItem.title
+            oldItem is Item2 && newItem is Item2 -> oldItem.id == newItem.id && oldItem.title == newItem.title
+            oldItem is Artwork && newItem is Artwork -> oldItem.id == newItem.id && oldItem.title == newItem.title
+            else -> false
+        }
+    }
+}
